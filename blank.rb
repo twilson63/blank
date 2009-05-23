@@ -50,7 +50,7 @@ end
 
 
 def valid_key?(api_key)
-  configkey = YAML.load(File.read('config/key.yml'))['production']['key']
+  configkey = ENV['API_KEY']
   # puts "#{api_key} == #{configkey}"
   api_key == configkey
   
