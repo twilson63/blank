@@ -41,12 +41,21 @@ get '/*' do
   if @page
     @title = @page.name.camelize
     my_layout = Page.find_by_name('layout').body
-    body = @page.body
+    body = get_body(@page)
   else
-    body = Page.find_by_name('index').body if Page.find_by_name('index')
-    my_layout = Page.find_by_name('layout').body if Page.find_by_name('index')
+    body = get_body(Page.find_by_name('index')) if Page.find_by_name('index')
+    my_layout = get_body(Page.find_by_name('layout')) if Page.find_by_name('layout')
   end
   haml body, :layout => my_layout
+end
+
+
+def get_body(page)
+  if page.page_type == "markdown"
+    RDiscount.new(page.body).to_html       
+  else
+    page.body
+  end  
 end
 
 
@@ -57,16 +66,21 @@ def valid_key?(api_key)
   
 end
 
-__END__
+template :index do
+  <<-INDEX
+%div.title Welcome to the Blank Project
+%br
+%a{:href => "http://github.com/twilson63/blank"} The Blank Project Home Page   
+  INDEX
+end
 
-@@ layout
+template :layout do
+  <<-LAYOUT
 %html
   %body
     = yield
-    
-@@ index
-%div.title Welcome to the Blank Project
-%br
-%a{:href => "http://github.com/twilson63/blank"} The Blank Project Home Page 
+  
+  LAYOUT
+end
 
 
