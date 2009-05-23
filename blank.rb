@@ -40,8 +40,12 @@ get '/*' do
       body = RDiscount.new(@page.body).to_html
     end
     @title = @page.name
-  
-    haml body, :layout => Page.find_by_name('layout').body
+    my_layout = Page.find_by_name('layout').body
+    if ENV['ASSET_URL']
+      body = body.replace('/images', ENV['ASSET_URL'] + '/images')
+      my_layout = my_layout.replace('/images', ENV['ASSET_URL'] + '/images')
+    end
+    haml body, :layout => 
   else
     @title = "JRS Web Kit 0.1"
     haml Page.find_by_name('home').body, :layout => Page.find_by_name('layout').body
