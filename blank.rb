@@ -1,4 +1,4 @@
-require 'rdiscount'
+
 require 'json'
 require 'activerecord'
 
@@ -33,19 +33,20 @@ end
 
 ### Front End
 get '/*' do
+  @title = "Home"
+  body = :index
+  my_layout = :layout
+
   @page = Page.get_page(params["splat"].to_s)
   if @page
     @title = @page.name.camelize
     my_layout = Page.find_by_name('layout').body
     body = @page.body
-    body = RDiscount.new(@page.body).to_html if @page.page_type == "markdown"    
-    haml body, :layout => my_layout
   else
-    @title = "Home"
-    body = Page.find_by_name('index').body || :index
-    my_layout = Page.find_by_name('layout').body || :layout
-    haml body, :layout => my_layout
+    body = Page.find_by_name('index').body if Page.find_by_name('index')
+    my_layout = Page.find_by_name('layout').body if Page.find_by_name('index')
   end
+  haml body, :layout => my_layout
 end
 
 
