@@ -6,4 +6,6 @@ With a simple process to upload this to a Rack Capable Web Server you can create
 
 * Sinatra App with low tech cms
 * Quickly put together simple web sites using haml and markdown
+* Deploy sites with single command line
+  * BlankClient.deploy
 
