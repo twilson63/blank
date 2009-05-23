@@ -1,3 +1,9 @@
 h1. Project Blank
 
 The purpose of this project is to create a blank web site, that can be loaded by haml or markdown pages dynamically real time.
+
+With a simple process to upload this to a Rack Capable Web Server you can create a blank web site.  Then use the BlankClient Utility to build you local web site environment, then create your haml files or markdown files, create a images and use amazon s3 to upload your content.
+
+* Sinatra App with low tech cms
+* Quickly put together simple web sites using haml and markdown
+
