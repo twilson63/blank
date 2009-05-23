@@ -38,18 +38,12 @@ get '/*' do
     @title = @page.name.camelize
     my_layout = Page.find_by_name('layout').body
     body = @page.body
-    if @page.page_type == "markdown"
-      body = RDiscount.new(@page.body).to_html
-    end
-    # if ENV['ASSET_URL']
-    #   body = body.replace('/images', ENV['ASSET_URL'] + '/images')
-    #   my_layout = my_layout.replace('/images', ENV['ASSET_URL'] + '/images')
-    # end
+    body = RDiscount.new(@page.body).to_html if @page.page_type == "markdown"    
     haml body, :layout => my_layout
   else
     @title = "Home"
-    body = Page.find_by_name('home').body
-    my_layout = Page.find_by_name('layout').body
+    body = Page.find_by_name('index').body || :index
+    my_layout = Page.find_by_name('layout').body || :layout
     haml body, :layout => my_layout
   end
 end
@@ -61,5 +55,17 @@ def valid_key?(api_key)
   api_key == configkey
   
 end
+
+__END__
+
+@@ layout
+%html
+  %body
+    = yield
+    
+@@ index
+%div.title Welcome to the Blank Project
+%br
+%a{:href => "http://github.com/twilson63/blank"} The Blank Project Home Page 
 
 
