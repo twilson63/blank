@@ -1,5 +1,3 @@
-require 'rdiscount'
-
 class Page < ActiveRecord::Base
   def self.get_page(request)
    ## Parse url and get last element

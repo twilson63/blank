@@ -1,11 +1,110 @@
-h1. Project Blank
+h1. The Blank Project
 
-The purpose of this project is to create a blank web site, that can be loaded by haml or markdown pages dynamically real time.
+h2. Project Description
 
-With a simple process to upload this to a Rack Capable Web Server you can create a blank web site.  Then use the BlankClient Utility to build you local web site environment, then create your haml files or markdown files, create a images and use amazon s3 to upload your content.
+This project was created to create a simple sinatra app that can serve as a simple web site framework.  The blank server is a sinatra app that has one table called pages, and it has a key based restful api that allows rest clients to manage the content of the web application.  Instead of having to build content management functionality into each web site you build, this architecture allows you to create a central cms system in Ruby on Rails or any Restful Capable language and deploy your changes simply using the restful api.  This will keep your web site very lean, but it give you a powerful dynamic web framework, and quick access to your web content via database server.
 
-* Sinatra App with low tech cms
-* Quickly put together simple web sites using haml and markdown
-* Deploy sites with single command line
-* BlankClient.deploy
+h2. Why "The Blank Project"?
 
+Very much like you need a blank before you clone something, this project works via the same principal, if you wanted to quickly clone one site from one server to another or manage changes on multiple servers, but have the same speed and flexibility of having your content served locally for each server, this architecture allows you to push the content very easily to each server.
+
+h2. Features
+
+* Lightweight API
+* Uses Haml and Markdown
+* Offsite Asset Storage
+* Use Ruby in Haml Views
+* Easy to deploy
+
+h2. Local Installation
+
+It is simple to install a blank locally and start testing.
+
+First make sure you have rake, thin, sinatra, rdiscount, and active record installed.
+
+@sudo gem install rake thin sinatra rdiscount activerecord@
+
+@git clone git://github.com/twilson63/blank.git@
+
+@cd blank@
+
+Setup/create you config/database.yml with the database of your choice.
+
+@rake db:migrate@
+
+@thin start -R config.ru@
+
+And you should be up and running, navigate to http://localhost:3000
+And you should see a web page pop up called "The Blank Project"
+If you run into a problem please post your issue in the issues list at http://github.com/twilson63/blank/issues
+
+Once you have the blank server running go to the blank client project to start adding your content. http://github.com/twilson63/blank-client
+
+h2. Heroku Installation
+
+It is just as easy to get you blank up and running on heroku as well.  Once you have a heroku account(http://heroku.com)
+
+@git clone git://github.com/twilson63/blank.git [Your Project Name]@
+
+@cd [Your Project Name]@
+
+@heroku create@
+
+@git push heroku master@
+
+@heroku rake db:migrate@
+
+@heroku config:add API_KEY=[Your Unique Api Key that you define]@
+
+@heroku open@
+
+You should be up and running your blank ready to go the blank client and get going with content...
+
+
+h2. Now What?
+
+Now that you have your blank server running it time to go the Blank Client Project and get started adding your content.  http://github.com/twilson63/blank-client
+
+h2. API
+
+All of the api commands can return in json.
+
+h3. Page Object Attributes
+
+Basically, to manage your content you just need to be familar with the Page Object, it is the only object in the api and you use a standard REST Controller to manage your content.
+
+* id
+* name
+* page_type = ['haml', 'markdown']
+* body
+
+
+h3. Get All Pages
+
+These examples are using the RestClient gem which you can install using:
+
+@sudo gem install rest-client@
+
+You can start the console of the rest client by running:
+
+@restclient@
+
+* Get All Pages
+
+@RestClient.get http://localhost:3000/pages?api_key=[Your Api Key]@
+
+* Get Single Page
+
+@RestClient.get http://localhost:3000/pages/[name or id]?api_key=[Your Api Key]@
+
+* Add New Page
+
+@RestClient.post http://localhost:3000/pages, :page => { :name => "index", :page_type => "haml", :body => "%h1 Hello World"}, :api_key => [Your Api Key]@
+
+* Update Existing Page
+
+@RestClient.put http://localhost:3000/pages/[:id], :page => { :name => "index", :page_type => "haml", :body => "%h1 Hello World"}, :api_key => [Your Api Key]@
+
+* Delete Existing Page
+
+@RestClient.delete http://localhost:3000/pages/[:id], :api_key => [Your Api Key]@

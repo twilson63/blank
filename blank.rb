@@ -1,4 +1,4 @@
-
+require 'rdiscount'
 require 'json'
 require 'activerecord'
 
@@ -10,7 +10,7 @@ ActiveRecord::Base.establish_connection dbconfig['production']
 
 ### Page Controller
 get '/pages' do
-  Page.all.to_json
+  Page.all.to_json if valid_key?(params["api_key"])
 end
 
 post '/pages' do
@@ -18,7 +18,7 @@ post '/pages' do
 end
 
 get '/pages/*' do
-  Page.get_page(params["splat"].to_s).to_json 
+  Page.get_page(params["splat"].to_s).to_json if valid_key?(params["api_key"])
 end
 
 # update 
