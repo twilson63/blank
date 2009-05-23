@@ -44,7 +44,7 @@ get '/*' do
     haml body, :layout => Page.find_by_name('layout').body
   else
     @title = "JRS Web Kit 0.1"
-    haml Page.find_by_name('home'), :layout => Page.find_by_name('layout').body
+    haml Page.find_by_name('home').body, :layout => Page.find_by_name('layout').body
   end
 end
 
