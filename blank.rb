@@ -41,10 +41,10 @@ get '/*' do
     if @page.page_type == "markdown"
       body = RDiscount.new(@page.body).to_html
     end
-    if ENV['ASSET_URL']
-      body = body.replace('/images', ENV['ASSET_URL'] + '/images')
-      my_layout = my_layout.replace('/images', ENV['ASSET_URL'] + '/images')
-    end
+    # if ENV['ASSET_URL']
+    #   body = body.replace('/images', ENV['ASSET_URL'] + '/images')
+    #   my_layout = my_layout.replace('/images', ENV['ASSET_URL'] + '/images')
+    # end
     haml body, :layout => my_layout
   else
     @title = "Home"
