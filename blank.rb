@@ -35,20 +35,22 @@ end
 get '/*' do
   @page = Page.get_page(params["splat"].to_s)
   if @page
+    @title = @page.name.camelize
+    my_layout = Page.find_by_name('layout').body
     body = @page.body
     if @page.page_type == "markdown"
       body = RDiscount.new(@page.body).to_html
     end
-    @title = @page.name
-    my_layout = Page.find_by_name('layout').body
     if ENV['ASSET_URL']
       body = body.replace('/images', ENV['ASSET_URL'] + '/images')
       my_layout = my_layout.replace('/images', ENV['ASSET_URL'] + '/images')
     end
-    haml body, :layout => 
+    haml body, :layout => my_layout
   else
-    @title = "JRS Web Kit 0.1"
-    haml Page.find_by_name('home').body, :layout => Page.find_by_name('layout').body
+    @title = "Home"
+    body = Page.find_by_name('home').body
+    my_layout = Page.find_by_name('layout').body
+    haml body, :layout => my_layout
   end
 end
 
