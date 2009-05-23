@@ -1,2 +1,3 @@
 config/database.yml
 config/key.yml
+blank.sqlite3
