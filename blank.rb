@@ -38,19 +38,17 @@ end
 
 ### Front End
 get '/*' do
-  @title = "Home"
+  @title = "index"
   body = :index
   my_layout = :layout
 
-  @page = Page.get_page(params["splat"].to_s)
+  @page = Page.get_page(params["splat"].to_s) || Page.find_by_name('index')
   if @page
     @title = @page.name.camelize
     my_layout = Page.find_by_name('layout').body
     body = get_body(@page)
-  else
-    body = get_body(Page.find_by_name('index')) if Page.find_by_name('index')
-    my_layout = get_body(Page.find_by_name('layout')) if Page.find_by_name('layout')
   end
+
   haml body, :layout => my_layout
 end
 
