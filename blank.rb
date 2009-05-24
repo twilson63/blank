@@ -10,23 +10,28 @@ ActiveRecord::Base.establish_connection dbconfig['production']
 
 ### Page Controller
 get '/pages' do
-  Page.all.to_json if valid_key?(params["api_key"])
+  key_required
+  Page.all.to_json
 end
 
 post '/pages' do
-  Page.create!(params["page"]).to_json if valid_key?(params["api_key"])
+  key_required
+  Page.create!(params["page"]).to_json
 end
 
 get '/pages/*' do
-  Page.get_page(params["splat"].to_s).to_json if valid_key?(params["api_key"])
+  key_required
+  Page.get_page(params["splat"].to_s).to_json
 end
 
 # update 
 put '/pages/:id' do
-  Page.find(params[:id]).update_attributes(params[:page]).to_json if valid_key?(params["api_key"])
+  key_required
+  Page.find(params[:id]).update_attributes(params[:page]).to_json 
 end
 
 delete '/pages/:id' do
+  key_required
   Page.find(params[:id]).destroy if valid_key?(params["api_key"])
   ""
 end
@@ -56,6 +61,10 @@ def get_body(page)
   else
     page.body
   end  
+end
+
+def key_required
+  throw :halt, [403, "Not Authorized"] unless valid_key?(params[:api_key])
 end
 
 
