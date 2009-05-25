@@ -1,6 +1,8 @@
 require 'rdiscount'
 require 'json'
 require 'activerecord'
+require 'crack'
+require 'rest_client'
 
 Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each {|f| require f }
 
