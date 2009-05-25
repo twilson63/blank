@@ -22,3 +22,21 @@ namespace :db do
   end
 
 end
+
+namespace :blank do
+  desc "Generate a unique API Key"
+  task(:generate_key => :environment) do
+    puts generateApiKey(12)
+  end  
+end
+
+
+def generateApiKey( codeLength )
+    validChars = ("A".."F").to_a + ("0".."9").to_a
+    length = validChars.size
+
+    hexCode = ""
+    1.upto(codeLength) { |i| hexCode << validChars[rand(length-1)] }
+
+    hexCode
+end
