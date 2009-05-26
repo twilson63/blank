@@ -16,30 +16,40 @@ ActiveRecord::Base.establish_connection dbconfig['production']
 class Page < ActiveRecord::Base
 end
 
+before do
+  if request.path_info.include?('pages')
+    key_required
+  else 
+    @asset_url = ENV['ASSET_URL'] 
+  end
+  
+end
+
+
 ### Page Controller
+
+## Index
 get '/pages' do
-  key_required
   Page.all.to_json
 end
 
+## Create
 post '/pages' do
-  key_required
   Page.create!(params["page"]).to_json
 end
 
+## Show
 get '/pages/*' do
-  key_required
   Page.find_by_name(params["splat"].to_s).to_json
 end
 
 # update 
 put '/pages/:id' do
-  key_required
   Page.find(params[:id]).update_attributes(params[:page]).to_json 
 end
 
+# delete 
 delete '/pages/:id' do
-  key_required
   Page.find(params[:id]).destroy
   ""
 end
