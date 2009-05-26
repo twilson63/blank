@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'haml'
 
 set :environment, :development
 disable :run
