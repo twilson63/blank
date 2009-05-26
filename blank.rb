@@ -29,7 +29,7 @@ end
 
 delete '/pages/:id' do
   key_required
-  Page.find(params[:id]).destroy if valid_key?(params["api_key"])
+  Page.find(params[:id]).destroy
   ""
 end
 
