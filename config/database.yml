@@ -1,3 +1,11 @@
 production:
   adapter: sqlite3
   database: blank.sqlite3
+
+test:
+  adapter: sqlite3
+  database: blank.sqlite3
+      
+development:
+  adapter: sqlite3
+  database: blank.sqlite3  

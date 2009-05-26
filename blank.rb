@@ -1,9 +1,20 @@
+require 'sinatra'
+require 'haml'
+require 'rdiscount'
+require 'json'
+require 'activerecord'
+require 'crack'
+require 'rest_client'
+require 'cgi'
 
-Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each {|f| require f }
+# Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each {|f| require f }
 
 
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection dbconfig['production']
+
+class Page < ActiveRecord::Base
+end
 
 ### Page Controller
 get '/pages' do
@@ -18,7 +29,7 @@ end
 
 get '/pages/*' do
   key_required
-  Page.get_page(params["splat"].to_s).to_json
+  Page.find_by_name(params["splat"].to_s).to_json
 end
 
 # update 
@@ -39,7 +50,7 @@ get '/*' do
   body = :index
   my_layout = :layout
 
-  @page = Page.get_page(params["splat"].to_s) || Page.find_by_name('index')
+  @page = Page.find_by_name(params["splat"].to_s) || Page.find_by_name('index')
   if @page
     @title = @page.name.camelize
     my_layout = Page.find_by_name('layout').body
@@ -64,9 +75,13 @@ end
 
 
 def valid_key?(api_key)
-  configkey = ENV['API_KEY']
-  # puts "#{api_key} == #{configkey}"
-  api_key == configkey
+  if ENV['API_KEY']
+    configkey = ENV['API_KEY']
+    # puts "#{api_key} == #{configkey}"
+    api_key == configkey
+  else
+    true
+  end
   
 end
 
