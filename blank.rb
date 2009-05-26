@@ -4,6 +4,7 @@ require 'activerecord'
 require 'crack'
 require 'rest_client'
 require 'cgi'
+require 'haml'
 
 Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each {|f| require f }
 
