@@ -7,23 +7,26 @@ require 'crack'
 require 'rest_client'
 require 'cgi'
 
-# Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each {|f| require f }
-
-
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection dbconfig['production']
 
 class Page < ActiveRecord::Base
 end
 
+# use Rack::Auth::Basic do |username, password|
+#   username == 'admin' && password == 'secret'
+# end
+
+
 before do
   if request.path_info.include?('pages')
     key_required
   else 
-    @asset_url = ENV['ASSET_URL'] 
+    @asset_url = ENV['ASSET_URL'] || ""
   end
   
 end
+
 
 
 ### Page Controller
@@ -56,6 +59,7 @@ end
 
 ### Front End
 get '/*' do
+
   @title = "index"
   body = :index
   my_layout = :layout
