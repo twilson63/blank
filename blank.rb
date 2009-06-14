@@ -6,6 +6,7 @@ require 'activerecord'
 require 'crack'
 require 'rest_client'
 require 'cgi'
+require 'lib/helpers'
 
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection dbconfig['production']
