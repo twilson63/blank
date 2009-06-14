@@ -4,11 +4,13 @@ helpers do
   end
   
   def text(obj, field, options={})
-    single_tag :input, options.merge(:type => "text", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
+    content = @params[obj] ? @params[obj][field.to_s] : ""       
+    single_tag :input, options.merge(:type => "text", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]", :value => content)
   end
   
   def area(obj, field, options={})
-    tag :textarea, "", options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
+    content = @params[obj] ? @params[obj][field.to_s] : ""        
+    tag :textarea, content, options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
   end
   
   def image(src, options={})
@@ -26,7 +28,8 @@ helpers do
   end
   
   def radio(obj, field, value, options={})
-    tag :input, value, options.merge(:type => "radio", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]", :value => value)
+    content = @params[obj] && @params[obj][field.to_s] == value ? "true" : ""       
+    tag :input, value, options.merge(:type => "radio", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]", :value => value, :checked => content)
     
   end
   
