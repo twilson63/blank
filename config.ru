@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'sinatra'
-require 'blank.rb'
+require 'blank'
 
 # path = ''
 # 
