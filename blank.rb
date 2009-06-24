@@ -95,7 +95,7 @@ def valid_key?(api_key)
     # puts "#{api_key} == #{configkey}"
     api_key == configkey
   else
-    true
+    false
   end
   
 end

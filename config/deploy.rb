@@ -1,5 +1,5 @@
-set :application, "blank"
-set :repository, "git@github.com:twilson63/#{application}.git"
+set :application, "exploreyourfuture"
+set :repository, "git@github.com:twilson63/blank.git"
 
 set :server_name, Capistrano::CLI.ui.ask("server name: ")
 
@@ -81,7 +81,7 @@ namespace :init do
 production:
   adapter: mysql
   encoding: utf8
-  database: rworld
+  database: #{application}
   host: localhost
   username: #{db_user}
   password: #{db_pass}
