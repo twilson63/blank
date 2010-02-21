@@ -3,6 +3,8 @@ require 'haml'
 require 'rdiscount'
 require 'json'
 require 'sequel'
+require 'sequel/extensions/migration'
+
 require 'crack'
 require 'active_support'
 
