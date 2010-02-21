@@ -33,8 +33,7 @@ end
 
 CreatePages.apply(DB, :up) unless DB.tables.include?(:pages)
 
-class Page < Sequel::Model
-  
+class Page < Sequel::Model  
   def before_create 
     self.created_at = Time.now
   end
@@ -42,7 +41,6 @@ class Page < Sequel::Model
   def before_save 
     self.updated_at = Time.now 
   end
-  
 end
 
 before do
@@ -51,7 +49,6 @@ before do
   else 
     @asset_url = ENV['ASSET_URL'] || ""
   end
-  
 end
 
 
@@ -70,7 +67,7 @@ end
 
 ## Show
 get '/pages/*' do
-  Page.where(:name => params["splat"].to_s).first.to_json
+  Page.where(:name => params["splat"].to_s).first[:values].to_json
 end
 
 # update 
