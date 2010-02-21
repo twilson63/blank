@@ -1,5 +1,6 @@
 source :gemcutter
 
+gem 'pg'
 gem 'sinatra'
 gem 'haml'
 gem 'rdiscount'

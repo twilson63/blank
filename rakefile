@@ -1,6 +1,6 @@
 namespace :blank do
   desc "Generate a unique API Key"
-  task(:generate_key => :environment) do
+  task(:generate_key) do
     puts generateApiKey(12)
   end  
 end
