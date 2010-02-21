@@ -21,9 +21,6 @@ describe 'Blank' do
   it "creates pages" do
     post '/pages?api_key=123456789', :page => { :name => 'sweet', :body => '%h1 Hello World', :page_type => 'haml'}
     Page.all.count.should == 1
-    puts Page.first.inspect
-    puts Page.first[:created_at]
-    puts Page.first[:updated_at]
     
   end
   
@@ -79,6 +76,17 @@ describe 'Blank' do
     Crack::JSON.parse(last_response.body).length == 1
     
   end
+  
+  it "should get single page" do
+    p = Page.create(:name => 'bang', :body => '%h1 Welcome', :page_type => 'haml')
+
+    get '/pages/bang?api_key=123456789'    
+    last_response.should be_ok
+    
+    Crack::JSON.parse(last_response.body)["name"] == "bang"
+    
+  end
+  
   
   it "should not be authorized" do
     get '/pages'
