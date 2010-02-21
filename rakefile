@@ -1,28 +1,3 @@
-require 'activerecord'
-
-task :environment do
-  dbconfig = YAML.load(File.read('config/database.yml'))
-  ActiveRecord::Base.establish_connection dbconfig['production']
-  
-end
-
-namespace :db do
-  desc "Migrate the database"
-  task(:migrate => :environment) do
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
-    ActiveRecord::Migration.verbose = true
-    ActiveRecord::Migrator.migrate("db/migrate")
-  end
-
-  desc "Rollback the database"
-  task(:rollback => :environment) do
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
-    ActiveRecord::Migration.verbose = true
-    ActiveRecord::Migrator.rollback("db/migrate")
-  end
-
-end
-
 namespace :blank do
   desc "Generate a unique API Key"
   task(:generate_key => :environment) do

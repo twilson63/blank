@@ -2,22 +2,14 @@ require 'sinatra'
 require 'haml'
 require 'rdiscount'
 require 'json'
-require 'activerecord'
+require 'sequel'
 require 'crack'
-require 'rest_client'
-require 'cgi'
-require 'sinatra/formhelpers'
+require 'active_support'
 
-dbconfig = YAML.load(File.read('config/database.yml'))
-ActiveRecord::Base.establish_connection dbconfig['production']
+DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://pages.db')
 
-class Page < ActiveRecord::Base
+class Page < Sequel::Model
 end
-
-# use Rack::Auth::Basic do |username, password|
-#   username == 'admin' && password == 'secret'
-# end
-
 
 before do
   if request.path_info.include?('pages')
@@ -39,48 +31,45 @@ end
 
 ## Create
 post '/pages' do
-  Page.create!(params["page"]).to_json
+  Page.create(params["page"]).to_json
 end
 
 ## Show
 get '/pages/*' do
-  Page.find_by_name(params["splat"].to_s).to_json
+  Page.where(:name => params["splat"].to_s).first.to_json
 end
 
 # update 
 put '/pages/:id' do
-  Page.find(params[:id]).update_attributes(params[:page]).to_json 
+  Page[params[:id]].update(params[:page]).to_json 
 end
 
 # delete 
 delete '/pages/:id' do
-  Page.find(params[:id]).destroy
+  Page[params[:id]].delete
   ""
 end
 
 ### Front End
 get '/*' do
-
-  @title = "index"
-  body = :index
-  my_layout = :layout
-
-  @page = Page.find_by_name(params["splat"].to_s) || Page.find_by_name('index')
+  @page = Page.where(:name => params["splat"].to_s).first || Page.where(:name => 'index').first
   if @page
-    @title = @page.name.camelize
-    my_layout = Page.find_by_name('layout').body
+    @title = @page[:name].camelize
+    if Page.where(:name => 'layout').count > 0
+      my_layout = Page.where(:name => 'layout').first[:body]
+    end
     body = get_body(@page)
   end
 
-  haml body, :layout => my_layout
+  haml body || :index, :layout => my_layout || :layout
 end
 
 
 def get_body(page)
-  if page.page_type == "markdown"
-    RDiscount.new(page.body).to_html       
+  if page[:page_type] == "markdown"
+    RDiscount.new(page[:body]).to_html       
   else
-    page.body
+    page[:body]
   end  
 end
 
@@ -90,14 +79,7 @@ end
 
 
 def valid_key?(api_key)
-  if ENV['API_KEY']
-    configkey = ENV['API_KEY']
-    # puts "#{api_key} == #{configkey}"
-    api_key == configkey
-  else
-    false
-  end
-  
+  api_key == (ENV['API_KEY'] || "123456789") 
 end
 
 template :index do
