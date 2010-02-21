@@ -87,6 +87,16 @@ describe 'Blank' do
     
   end
   
+  it "should create a css" do
+    p = Page.create(:name => 'app', :body => '#header { background: #000; }', :page_type => 'css')
+
+    get '/app.css'    
+    last_response.should be_ok
+    
+    last_response.body.should == '#header { background: #000; }'
+  end
+  
+  
   
   it "should not be authorized" do
     get '/pages'

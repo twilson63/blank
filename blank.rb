@@ -82,9 +82,16 @@ delete '/pages/:id' do
   ""
 end
 
+get '/*.css' do
+  name = params["splat"]
+  @page = Page.where(:name => name, :page_type => 'css').first
+  @page[:body]
+end
+
 ### Front End
-get '/*' do
-  @page = Page.where(:name => params["splat"].to_s).first || Page.where(:name => 'index').first
+get '/*' do  
+  name = params["splat"]
+  @page = Page.where(:name => name).first || Page.where(:name => 'index').first  
   if @page
     @title = @page[:name].camelize
     if Page.where(:name => 'layout').count > 0
