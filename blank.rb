@@ -85,6 +85,7 @@ end
 get '/*.css' do
   name = params["splat"]
   @page = Page.where(:name => name, :page_type => 'css').first
+  content_type 'text/css'
   @page[:body]
 end
 
