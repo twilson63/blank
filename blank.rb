@@ -67,7 +67,8 @@ end
 
 ## Show
 get '/pages/*' do
-  Page.where(:name => params["splat"].to_s).first.values.to_json
+  page =Page.where(:name => params["splat"].to_s).first
+  page.values.to_json if page
 end
 
 # update 
