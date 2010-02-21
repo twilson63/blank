@@ -34,6 +34,15 @@ end
 CreatePages.apply(DB, :up) unless DB.tables.include?(:pages)
 
 class Page < Sequel::Model
+  
+  def before_create 
+    self.created_at = Time.now
+  end
+  
+  def before_save 
+    self.updated_at = Time.now 
+  end
+  
 end
 
 before do

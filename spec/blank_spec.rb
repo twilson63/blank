@@ -21,6 +21,10 @@ describe 'Blank' do
   it "creates pages" do
     post '/pages?api_key=123456789', :page => { :name => 'sweet', :body => '%h1 Hello World', :page_type => 'haml'}
     Page.all.count.should == 1
+    puts Page.first.inspect
+    puts Page.first[:created_at]
+    puts Page.first[:updated_at]
+    
   end
   
   it "says sweet" do
